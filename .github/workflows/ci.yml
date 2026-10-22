@@ -30,3 +30,14 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t devops-portfolio:${{ github.sha }} .
+
+      - name: Scan Docker image with Trivy
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: devops-portfolio:${{ github.sha }}
+          format: table
+          vuln-type: os,library
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+          exit-code: "0"
+
